@@ -10,7 +10,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.time.Year;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,14 +33,11 @@ public class MoviesApiTest {
         server.stop();
     }
 
-
     // ---------- POST /movies ----------
 
     @Test
     void postMovies_addsMovie_whenValid() throws Exception {
-        String body = """
-                { "title": "Inception", "year": 2010 }
-                """;
+        String body = "{ \"title\": \"Inception\", \"year\": 2010 }";
 
         HttpResponse<String> response = sendPost("/movies", body);
 
@@ -54,9 +50,7 @@ public class MoviesApiTest {
 
     @Test
     void postMovies_returns422_whenTitleEmpty() throws Exception {
-        String body = """
-                { "title": "", "year": 2000 }
-                """;
+        String body = "{ \"title\": \"\", \"year\": 2000 }";
 
         HttpResponse<String> response = sendPost("/movies", body);
 
@@ -66,9 +60,7 @@ public class MoviesApiTest {
     @Test
     void postMovies_returns422_whenTitleTooLong() throws Exception {
         String longTitle = "a".repeat(101);
-        String body = """
-                { "title": "%s", "year": 2000 }
-                """.formatted(longTitle);
+        String body = "{ \"title\": \"" + longTitle + "\", \"year\": 2000 }";
 
         HttpResponse<String> response = sendPost("/movies", body);
 
@@ -77,9 +69,7 @@ public class MoviesApiTest {
 
     @Test
     void postMovies_returns422_whenYearInvalid() throws Exception {
-        String body = """
-                { "title": "Test", "year": 1800 }
-                """;
+        String body = "{ \"title\": \"Test\", \"year\": 1800 }";
 
         HttpResponse<String> response = sendPost("/movies", body);
 
@@ -192,9 +182,7 @@ public class MoviesApiTest {
     // ---------- Вспомогательные методы ----------
 
     private static Movie addMovie(String title, int year) throws Exception {
-        String body = """
-                { "title": "%s", "year": %d }
-                """.formatted(title, year);
+        String body = "{ \"title\": \"" + title + "\", \"year\": " + year + " }";
 
         HttpResponse<String> response = sendPost("/movies", body);
         return gson.fromJson(response.body(), Movie.class);
