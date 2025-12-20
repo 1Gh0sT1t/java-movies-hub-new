@@ -6,8 +6,10 @@ import ru.practicum.moviehub.store.MoviesStore;
 // Точка входа в приложение
 public class MovieHubApp {
 
+    private static final int PORT = 8080;
+
     public static void main(String[] args) {
-        MoviesServer server = new MoviesServer(new MoviesStore(), 8080);
+        MoviesServer server = new MoviesServer(new MoviesStore(), PORT);
         Runtime.getRuntime().addShutdownHook(new Thread(server::stop));
         server.start();
     }
